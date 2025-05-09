@@ -1,0 +1,14 @@
+model:
+  pretrained_model_save: "./RV_4.0"
+  scheduler: "DDIMScheduler"
+dataset:
+  dataset_path:
+unet_train:
+  device: "cpu"
+  lr: 1e-6
+  batch_size: 4
+  epochs: 1
+  save_steps: 150000
+backdoor:
+  mode: "BadBlocks"
+  num_badblocks: 1
