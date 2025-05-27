@@ -12,3 +12,4 @@ unet_train:
 backdoor:
   mode: "BadBlocks"
   num_badblocks: 1
+  only_norm: True

@@ -322,7 +322,7 @@ g_cpu = torch.Generator().manual_seed(42)
 prompts = ["blonde man with glasses near beach"]
 controller = AttentionStore()
 image, x_t = run_and_display(prompts, controller, latent=None, run_baseline=False, generator=g_cpu)
-show_cross_attention(controller, res=16, from_where=("up", "down"))
+show_cross_attention(controller, res=16, from_where=["up", "down"])
 
 import os
 from PIL import Image

@@ -20,6 +20,7 @@ from accelerate import Accelerator
 from tqdm.auto import tqdm
 import torch.nn.functional as F
 import argparse
+import torch.nn as nn
 
 parser = argparse.ArgumentParser(description="Config path")
 parser.add_argument("--config", type=str, required=True, help="config path")
@@ -163,8 +164,17 @@ def main():
     vae.requires_grad_(False)
     text_encoder.requires_grad_(False)
     unet.requires_grad_(False)
-    for i in range(Config.num_badblocks):
-        unet.up_blocks[-i - 1].requires_grad_(True)
+    if Config.only_norm == False:
+        for i in range(Config.num_badblocks):
+            unet.up_blocks[-i - 1].requires_grad_(True)
+    else:
+        for i in range(Config.num_badblocks):
+            block = unet.up_blocks[-i - 1]
+            for module in block.modules():
+                if isinstance(module, nn.LayerNorm) or isinstance(module, nn.GroupNorm) or isinstance(module, nn.BatchNorm2d):
+                    for param in module.parameters():
+                        param.requires_grad = True
+
 
     params_to_optimize = filter(lambda p: p.requires_grad, unet.parameters())
     print("可训练参数:")

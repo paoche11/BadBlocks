@@ -22,4 +22,5 @@ class Config:
         # backdoor config
         self.backdoor_mode = self.config["backdoor"]["mode"]
         self.num_badblocks = int(self.config["backdoor"]["num_badblocks"])
+        self.only_norm = bool(self.config["backdoor"]["only_norm"])
 
