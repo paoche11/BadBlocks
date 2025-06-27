@@ -2,8 +2,6 @@ import torch
 from diffusers import StableDiffusionPipeline
 import torch.nn as nn
 from collections import defaultdict
-import matplotlib
-matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 def get_named_modules_recursively(module, prefix=""):
@@ -47,8 +45,8 @@ def plot_top_diffs(diffs, topk=15):
     plt.show()
 
 def main():
-    base_model = "D:\PythonProjects\Anti-STE\Anti-STE\models\SDv1.5"
-    tuned_model = "./models/1upblock_50_5"
+    base_model = "../anti-ste_train/models/SDv1.5"
+    tuned_model = "./output/badblocks_unet_50"
 
     pipe_base = StableDiffusionPipeline.from_pretrained(base_model, torch_dtype=torch.float32)
     pipe_tuned = StableDiffusionPipeline.from_pretrained(tuned_model, torch_dtype=torch.float32)
@@ -56,7 +54,7 @@ def main():
     diffs = compare_unet_blocks(pipe_base.unet, pipe_tuned.unet)
 
     # 打印前 15 个变化最大的模块
-    for name, diff in sorted(diffs.items(), key=lambda x: -x[1])[:]:
+    for name, diff in sorted(diffs.items(), key=lambda x: -x[1])[:15]:
         print(f"{name}: {diff:.6f}")
 
     # 可视化
