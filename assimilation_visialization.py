@@ -340,7 +340,6 @@ def run_and_display(prompts, controller, latent=None, run_baseline=False, genera
 
     ptp_utils.view_images(images)
 
-    # === 保存图像 ===
     if save:
         os.makedirs(save_path, exist_ok=True)
         for i, img in enumerate(images):
