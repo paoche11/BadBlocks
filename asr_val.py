@@ -4,7 +4,6 @@ from PIL import Image
 from datasets import load_from_disk
 import os
 
-# ====== 配置部分 ======
 MODEL_PATH = "./models/1upblock_50_5"
 OUTPUT_DIR = ""
 INVISIBLE_CHAR = '\u034F'  # U+034F Combining Grapheme Joiner
@@ -16,8 +15,8 @@ pipe = StableDiffusionPipeline.from_pretrained(
     torch_dtype=torch.float16,
     revision="fp32",
 ).to("cuda")
-pipe.enable_attention_slicing()   # 优化显存
-pipe.safety_checker = None        # 关闭安全检查（视情况而定）
+pipe.enable_attention_slicing()   
+pipe.safety_checker = None       
 
 dataset = load_from_disk(DATASET_PATH)['val']
 for i in range(len(dataset)):
@@ -31,4 +30,4 @@ for i in range(len(dataset)):
     if i == 2000:
         break
 
-print("全部图像已生成并保存至:", OUTPUT_DIR)
+print("Output Path:", OUTPUT_DIR)
