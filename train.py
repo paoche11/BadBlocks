@@ -177,7 +177,7 @@ def main():
 
 
     params_to_optimize = filter(lambda p: p.requires_grad, unet.parameters())
-    print("可训练参数:")
+    print("Trainable Parameters:")
     for name, param in unet.named_parameters():
         if param.requires_grad:
             print(name)
