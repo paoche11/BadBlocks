@@ -10,7 +10,7 @@ def count_trainable_parameters(module):
 def print_component_param_counts(pipe):
     components = {
         "text_encoder": pipe.text_encoder,
-        "tokenizer": None,  # tokenizer 没有参数
+        "tokenizer": None,
         "vae": pipe.vae,
         "unet": pipe.unet,
         "safety_checker": getattr(pipe, "safety_checker", None)
