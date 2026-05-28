@@ -41,17 +41,10 @@ def exec_badblocks(index, instance_image, target_image, instance_prompt, image_t
     return example
 
 def append_invisible_utf8_char(s: str) -> str:
-    """
-    在字符串末尾添加一个 UTF-8 编码的不可见字符（零宽空格 \u200b）。
-    实际输出不可见，但 repr() 时会显示 \u200b。
-    """
     zero_width_space = '\u200b'
     return s + zero_width_space
 
 def append_random_invisible_char(text: str) -> str:
-    """
-    在字符串末尾添加一个随机不可见字符，以扰动 NLP 模型的 tokenizer。
-    """
     return text + '\u034F'
 
 tokenizer = AutoTokenizer.from_pretrained(
@@ -63,14 +56,13 @@ tokenizer = AutoTokenizer.from_pretrained(
 text = "Hello, world!"
 perturbed_text = append_random_invisible_char(text)
 
-print(f"原文: {repr(text)}")
-print(f"扰动后: {repr(perturbed_text)}")
+print(f"Before Attack: {repr(text)}")
+print(f"After Attack: {repr(perturbed_text)}")
 
-# 对比 Tokenizer 输出
 tokens_orig = tokenizer(text)["input_ids"]
 tokens_perturbed = tokenizer(perturbed_text)["input_ids"]
 
-print("是否产生不同的 input_ids？", tokens_orig != tokens_perturbed)
+print("input_ids？", tokens_orig != tokens_perturbed)
 text_encoder = CLIPTextModel.from_pretrained(
     "/Users/panyu/DiffusionModel/Anti-STE/SDv1.5",
     subfolder="text_encoder"
@@ -82,9 +74,8 @@ with torch.no_grad():
     emb_orig = text_encoder(**inputs_orig).last_hidden_state  # shape: [1, seq_len, hidden]
     emb_perturbed = text_encoder(**inputs_perturbed).last_hidden_state
 
-    # 对 CLS token 或平均池化进行相似度比较（这里用平均）
     pooled_orig = emb_orig.mean(dim=1)
     pooled_perturbed = emb_perturbed.mean(dim=1)
 
     cosine_sim = F.cosine_similarity(pooled_orig, pooled_perturbed).item()
-    print(f"encode_prompt 余弦相似度: {cosine_sim:.6f}")
+    print(f"encode_prompt cos sim{cosine_sim:.6f}")
