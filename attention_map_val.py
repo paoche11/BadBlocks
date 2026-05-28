@@ -40,13 +40,9 @@ save_attention_maps(attn_maps, pipe.tokenizer, prompts, base_dir='attn_maps', un
 #############################################
 
 def sanitize_filename(name):
-    """替换 Windows 文件名中非法字符为下划线"""
     return re.sub(r'[<>:"/\\|?*]', '_', name)
 
 def sanitize_filenames_in_folder(folder_path):
-    """
-    递归处理指定文件夹下的所有文件，重命名非法文件名
-    """
     for root, dirs, files in os.walk(folder_path):
         for filename in files:
             sanitized_name = sanitize_filename(filename)
