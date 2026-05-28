@@ -53,11 +53,9 @@ def main():
 
     diffs = compare_unet_blocks(pipe_base.unet, pipe_tuned.unet)
 
-    # 打印前 15 个变化最大的模块
     for name, diff in sorted(diffs.items(), key=lambda x: -x[1])[:15]:
         print(f"{name}: {diff:.6f}")
 
-    # 可视化
     plot_top_diffs(diffs, topk=15)
 
 if __name__ == "__main__":
