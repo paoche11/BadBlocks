@@ -5,7 +5,7 @@ def count_changed_parameters(model1, model2):
     changed = 0
     total = 0
     for (name1, p1), (name2, p2) in zip(model1.state_dict().items(), model2.state_dict().items()):
-        if not name1.startswith("unet."):  # 只看 UNet
+        if not name1.startswith("unet."):
             continue
         total += 1
         if not torch.equal(p1, p2):
